@@ -1,5 +1,8 @@
 var gulp = require('gulp'),
 	stylus = require('gulp-stylus'),
+	rupture = require('rupture'),
+	concat = require('gulp-concat'),
+	uglify = require('gulp-uglify'),
 	imagemin = require('gulp-imagemin');
 
 var browserSync = require('browser-sync')
@@ -10,7 +13,8 @@ var srcPaths = {
 	js: 'src/js/**/*.js',
 	css: 'src/styl/**/*.styl',
 	styl: 'src/styl/style.styl',
-	img: 'src/img/**'
+	img: 'src/img/**',
+	svg: 'src/svg/**/*.svg'
 };
 
 // Builded files
@@ -18,7 +22,9 @@ var buildPaths = {
 	build: 'build/**/*',
 	js: 'build/js/**/*.js',
 	css: 'build/css/',
-	img: 'build/img/'
+	img: 'build/img/',
+	svg: 'build/svg/'
+
 };
 
 
@@ -29,7 +35,9 @@ var buildPaths = {
 
 gulp.task('stylus', function(){
 	gulp.src(srcPaths.styl)
-		.pipe(stylus())
+		.pipe(stylus({
+			use: [rupture()]
+		}))
 		.pipe(gulp.dest(buildPaths.css));
 });
 
@@ -41,23 +49,23 @@ gulp.task('img', function() {
 });
 
 
+gulp.task('js', function() {
+	gulp.src(srcPaths.js)
+		.pipe(concat('main.js'))
+		.pipe(uglify())
+		.pipe(gulp.dest(buildPaths.js))
+})
 
 
-
-// Watch task
-// -------------------------------------
-
-gulp.task('watch', function(){
-	gulp.watch(srcPaths.css, ['stylus']);
+// deploy svg
+gulp.task('svg-deploy', function(){
+	gulp.src(srcPaths.svg)
+		.pipe(gulp.dest(buildPaths.img))
 });
-
-
-
 
 
 // Browser sync
 // -------------------------------------
-
 gulp.task('browser-sync', function(){
 	var files = buildPaths.build;
 
@@ -66,6 +74,19 @@ gulp.task('browser-sync', function(){
 			baseDir: './build/'
 		}
 	});
+});
+
+
+
+
+// Watch task
+// -------------------------------------
+
+gulp.task('watch', ['browser-sync'], function(){
+	gulp.watch(srcPaths.css, ['stylus']);
+	gulp.watch(srcPaths.img, ['img', 'svg-deploy']);
+	gulp.watch(srcPaths.js, ['js']);
+
 });
 
 

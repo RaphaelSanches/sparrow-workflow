@@ -1,1 +1,9 @@
 /* oi */
+.oi {
+  background: #fff;
+}
+@media only screen and (max-width: 500px) {
+  .oi {
+    background: #000;
+  }
+}
