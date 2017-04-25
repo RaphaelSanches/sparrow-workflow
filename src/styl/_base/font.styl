@@ -1,0 +1,44 @@
+// *****************************************************************************************
+
+// FONTS
+
+// *****************************************************************************************
+
+
+// Mixing
+font-url(file)
+  return '../fonts/' + file
+
+webfont(family, file, hack-chrome-windows = false, weight = 'normal')
+  @font-face
+    font-family family
+    src url(font-url(file + '.eot'))
+    src url(font-url(file + '.eot?#iefix')) format('embedded-opentype'),
+        url(font-url(file + '.woff')) format('woff'), 
+        url(font-url(file + '.ttf')) format('truetype'), 
+        url(font-url(file + '.svg#'+ family)) format('svg')
+    font-weight weight
+    font-style normal
+  if hack-chrome-windows
+    @media screen and (-webkit-min-device-pixel-ratio:0)
+      @font-face
+        font-family family
+        src url(font-url(file + '.svg#'+ family)) format('svg')
+        
+
+
+
+// Using
+//----------------
+
+// Open Sans
+
+// Regular
+webfont('Open Sans Regular', 'opensans-regular-webfont', true, 'normal')
+
+// Semibold
+webfont('Open Sans Semibold', 'opensans-semibold-webfont', true, '700')
+
+
+// Grand Hotel
+webfont('Grand Hotel', 'grandhotel-regular-webfont', true, 'normal')

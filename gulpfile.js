@@ -1,16 +1,28 @@
+// SPARROW WORKFLOW
+// a simple workflow
+// by Raphael Sanches
+// -------------------------------------
+
+
+// Initializing
 var gulp = require('gulp'),
 	stylus = require('gulp-stylus'),
 	rupture = require('rupture'),
 	concat = require('gulp-concat'),
+	csslint = require('gulp-csslint'),
+	cssnano = require('gulp-cssnano'),
 	uglify = require('gulp-uglify'),
+	jshint = require('gulp-jshint'),
+	browserSync = require('browser-sync'),
 	imagemin = require('gulp-imagemin');
+	
 
-var browserSync = require('browser-sync')
 
 
 // Source files
 var srcPaths = {
-	js: 'src/js/**/*.js',
+	jsVendor: 'src/js/vendor/*',
+	js: 'src/js/main.js',
 	css: 'src/styl/**/*.styl',
 	styl: 'src/styl/style.styl',
 	img: 'src/img/**',
@@ -24,7 +36,6 @@ var buildPaths = {
 	css: 'build/css/',
 	img: 'build/img/',
 	svg: 'build/svg/'
-
 };
 
 
@@ -33,24 +44,33 @@ var buildPaths = {
 // Tasks!
 // -------------------------------------
 
-gulp.task('stylus', function(){
+gulp.task('css', function(){
 	gulp.src(srcPaths.styl)
 		.pipe(stylus({
 			use: [rupture()]
 		}))
+		.pipe(csslint())
+		.pipe(cssnano())
 		.pipe(gulp.dest(buildPaths.css));
 });
 
 
 gulp.task('img', function() {
 	gulp.src(srcPaths.img)
-		.pipe(imagemin({optimizationLevel: 5, progressive: true, interlaced: true, cache: false}))
+		.pipe(imagemin({
+			optimizationLevel: 7,
+			progressive: true,
+			verbose: false,
+			cache: false
+		}))
 		.pipe(gulp.dest(buildPaths.img));
 });
 
 
 gulp.task('js', function() {
-	gulp.src(srcPaths.js)
+	gulp.src([srcPaths.jsVendor, srcPaths.js])
+		.pipe(jshint())
+        .pipe(jshint.reporter('default'))
 		.pipe(concat('main.js'))
 		.pipe(uglify())
 		.pipe(gulp.dest(buildPaths.js))
@@ -71,7 +91,7 @@ gulp.task('browser-sync', function(){
 
 	browserSync.init(files, {
 		server: {
-			baseDir: './build/'
+			baseDir: './'
 		}
 	});
 });
@@ -83,10 +103,17 @@ gulp.task('browser-sync', function(){
 // -------------------------------------
 
 gulp.task('watch', ['browser-sync'], function(){
-	gulp.watch(srcPaths.css, ['stylus']);
+	gulp.watch(srcPaths.css, ['css']);
 	gulp.watch(srcPaths.img, ['img', 'svg-deploy']);
 	gulp.watch(srcPaths.js, ['js']);
 
 });
 
-
+gulp.task('build', function(){
+	gulp.start(
+		'css',
+		'js',
+		'img',
+		'svg-deploy'
+	);
+});

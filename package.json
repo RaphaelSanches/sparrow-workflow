@@ -28,9 +28,13 @@
     "browser-sync": "^2.15.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
+    "gulp-csslint": "^1.0.0",
+    "gulp-cssnano": "^2.1.2",
     "gulp-imagemin": "^3.0.3",
+    "gulp-jshint": "^2.0.4",
     "gulp-stylus": "^2.5.0",
     "gulp-uglify": "^2.0.0",
+    "jshint": "^2.9.4",
     "rupture": "^0.6.1"
   }
 }
