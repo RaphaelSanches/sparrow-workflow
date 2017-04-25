@@ -9,6 +9,7 @@ var gulp = require('gulp'),
 	stylus = require('gulp-stylus'),
 	rupture = require('rupture'),
 	concat = require('gulp-concat'),
+	cssnano = require('gulp-autoprefixer'),
 	csslint = require('gulp-csslint'),
 	cssnano = require('gulp-cssnano'),
 	uglify = require('gulp-uglify'),
@@ -49,6 +50,10 @@ gulp.task('css', function(){
 		.pipe(stylus({
 			use: [rupture()]
 		}))
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions'],
+            cascade: false
+        }))
 		.pipe(csslint())
 		.pipe(cssnano())
 		.pipe(gulp.dest(buildPaths.css));
