@@ -1,6 +1,6 @@
 // *****************************************************************************************
 
-// BASE
+// Generic elemens
 
 // *****************************************************************************************
 
@@ -16,47 +16,17 @@
         -moz-box-sizing: border-box
         box-sizing: border-box
 
-html
+
 body
-    height 100%
+	@extends $font-example
+	font-size 62.5%	
     
-
-    
-body
-    font-family 'Open Sans', sans-serif
-    font-weight normal
-    line-height 1.5
-    font-size 85%
-    
-    +above(sm)
-        font-size 100%
-
-
-
-img
-    max-width 100%
-    clear both
-    display block
-    
-
 
 a
     color mainColor
     text-decoration none
     
-    &:hover
+	&:hover
+	&:focus
+	&:active
         text-decoration underline
-
-h1
-h2
-h3
-h4
-h5
-h6
-    font-weight normal
-    margin-top 0
-    margin-bottom 1rem
-
-
-address
-    font-style normal
